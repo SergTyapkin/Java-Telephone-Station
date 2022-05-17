@@ -11,17 +11,22 @@ import org.omg.CosNaming.NamingContextExtHelper;
 import org.omg.PortableServer.POA;
 import org.omg.PortableServer.POAHelper;
 
+import java.util.HashMap;
+import java.util.Map;
+
 // Класс, реализующий IDL-интерфейс базовой станции
 class StationServant extends StationPOA {
     // Вместо представленных ниже двух переменных здесь
     // должен быть список пар "номер - объектная ссылка"
     TubeCallback tubeRef;
     String tubeNum;
+    Map<String, TubeCallback> abonents = new HashMap<String,TubeCallback>();
 
     // Метод регистрации трубки в базовой станции
     public int register (TubeCallback objRef, String phoneNum) {
         tubeRef = objRef;
         tubeNum = phoneNum;
+        abonents.put(phoneNum, objRef); // save abonent callback to map
         System.out.println("Client registered: " + tubeNum);
         return (1);
     };
@@ -29,8 +34,12 @@ class StationServant extends StationPOA {
     // Метод пересылки сообщения от трубки к трубке
     public int sendSMS (String fromNum, String toNum, String message) {
         System.out.println("Message from: " + fromNum + " to: " + toNum + " with text: " + message);
-        // Здесь должен быть поиск объектной ссылки по номеру toNum
-        tubeRef.sendSMS(fromNum, message);
+        if (!abonents.containsKey(toNum)) {
+            tubeRef.sendSMS("_Station_", "Client with name \"" + toNum + "\" doesn't exists");
+            return (0);
+        }
+        TubeCallback ref = abonents.get(toNum); // get abonent callback by his number
+        ref.sendSMS(fromNum, message);
         return (1);
     };
 };

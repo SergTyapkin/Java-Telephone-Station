@@ -18,7 +18,7 @@ class TubeCallbackServant extends TubeCallbackPOA {
 
     // Метод обработки принятого сообщения
     public int sendSMS(String fromNum, String message) {
-        System.out.println(myNum + ": Message from: " + fromNum + " with text: " + message);
+        System.out.println("Message from: " + fromNum + " with text: " + message);
         return (0);
     };
 
@@ -86,9 +86,15 @@ public class Tube {
             String msg;
             while (true) {
                 msg = inpt.readLine();
-                stationRef.sendSMS(myNum, "7890", msg);
-                // Обратите внимание: номер получателя 7890 в описанной ранее
-                // реализации базовой станции роли не играет
+                int index = msg.indexOf("@ ");
+                if (index == -1) {
+                    System.out.println("Message format: clientName@ message");
+                    continue;
+                }
+                String client = msg.substring(0, index);
+                msg = msg.substring(index+1);
+
+                stationRef.sendSMS(myNum, client, msg);
             }
         } catch (java.io.IOException e) {
             return;
