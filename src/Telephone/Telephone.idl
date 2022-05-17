@@ -6,7 +6,7 @@ module Cell {
     long sendSMS (in string fromNum, in string message);
     /* Вернуть свой номер */
     string getNum();
-    };
+  };
 
   /* Интерфейс базовой станции */
   interface Station {
@@ -15,6 +15,5 @@ module Cell {
     long register (in TubeCallback objRef, in string phoneNum);
     /* Отправить сообщение message от номера fromNum к номеру toNum */
     long sendSMS (in string fromNum, in string toNum, in string message);
-    };
-
   };
+};

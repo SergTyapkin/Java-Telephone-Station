@@ -18,7 +18,7 @@ class TubeCallbackServant extends TubeCallbackPOA {
 
     // Метод обработки принятого сообщения
     public int sendSMS(String fromNum, String message) {
-        System.out.println(myNum+": принято сообщение от "+fromNum+": "+message);
+        System.out.println(myNum + ": Message from: " + fromNum + " with text: " + message);
         return (0);
     };
 
@@ -46,9 +46,11 @@ class ORBThread extends Thread {
 // Класс, имитирующий телефонную трубку
 public class Tube {
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         try {
-            String myNum = "1234";	// Номер трубки
+            String myNum = args[0];	// Номер трубки
+            System.out.println("Client has phone number " + myNum);
+
             // Создание и инициализация ORB
             ORB orb = ORB.init(args, null);
 
@@ -66,12 +68,12 @@ public class Tube {
 
             // Преобразование имени базовой станции в объектную ссылку
             NameComponent nc = new NameComponent("BaseStation", "");
-            NameComponent path[] = {nc};
+            NameComponent[] path = {nc};
             Station stationRef = StationHelper.narrow(ncRef.resolve(path));
 
             // Регистрация трубки в базовой станции
-            stationRef .register(ref, myNum);
-            System.out.println("Трубка зарегистрирована базовой станцией");
+            stationRef.register(ref, myNum);
+            System.out.println("Client registered by the server station");
 
             // Запуск ORB в отдельном потоке управления
             // для прослушивания вызовов трубки
@@ -84,16 +86,14 @@ public class Tube {
             String msg;
             while (true) {
                 msg = inpt.readLine();
-                stationRef .sendSMS(myNum, "7890", msg);
+                stationRef.sendSMS(myNum, "7890", msg);
                 // Обратите внимание: номер получателя 7890 в описанной ранее
                 // реализации базовой станции роли не играет
             }
-
+        } catch (java.io.IOException e) {
+            return;
         } catch (Exception e) {
             e.printStackTrace();
         };
-
-
     };
-
 };

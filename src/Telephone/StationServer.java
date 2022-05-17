@@ -22,13 +22,13 @@ class StationServant extends StationPOA {
     public int register (TubeCallback objRef, String phoneNum) {
         tubeRef = objRef;
         tubeNum = phoneNum;
-        System.out.println("Станция: зарегистрирована трубка "+tubeNum);
+        System.out.println("Client registered: " + tubeNum);
         return (1);
     };
 
     // Метод пересылки сообщения от трубки к трубке
     public int sendSMS (String fromNum, String toNum, String message) {
-        System.out.println("Станция: трубка "+fromNum+" посылает сообщение "+toNum);
+        System.out.println("Message from: " + fromNum + " to: " + toNum + " with text: " + message);
         // Здесь должен быть поиск объектной ссылки по номеру toNum
         tubeRef.sendSMS(fromNum, message);
         return (1);
@@ -37,9 +37,8 @@ class StationServant extends StationPOA {
 
 // Класс, реализующий сервер базовой станции
 public class StationServer {
-
-    public static void main(String args[]) {
-        try{
+    public static void main(String[] args) {
+        try {
             // Создание и инициализация ORB
             ORB orb = ORB.init(args, null);
 
@@ -58,16 +57,14 @@ public class StationServer {
             NamingContextExt ncRef = NamingContextExtHelper.narrow(objRef);
 
             // Связывание объектной ссылки с именем
-            String name = "BaseStation";
-            NameComponent path[] = ncRef.to_name( name );
+            NameComponent[] path = ncRef.to_name("BaseStation");
             ncRef.rebind(path, sref);
 
-            System.out.println("Сервер готов и ждет ...");
+            System.out.println("Server ie ready and waiting for ...");
 
             // Ожидание обращений от клиентов (трубок)
             orb.run();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.err.println("Ошибка: " + e);
             e.printStackTrace(System.out);
         };
