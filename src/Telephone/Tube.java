@@ -1,6 +1,6 @@
 package Telephone;
 
-import Telephone.App.*;
+import Telephone.Cell.*;
 import org.omg.CosNaming.*;
 import org.omg.CORBA.*;
 import org.omg.PortableServer.*;

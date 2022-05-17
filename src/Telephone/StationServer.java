@@ -1,9 +1,9 @@
 package Telephone;
 
-import Telephone.App.Station;
-import Telephone.App.StationHelper;
-import Telephone.App.StationPOA;
-import Telephone.App.TubeCallback;
+import Telephone.Cell.Station;
+import Telephone.Cell.StationHelper;
+import Telephone.Cell.StationPOA;
+import Telephone.Cell.TubeCallback;
 import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NameComponent;
 import org.omg.CosNaming.NamingContextExt;
